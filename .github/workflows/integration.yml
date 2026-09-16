@@ -18,11 +18,17 @@ on:
       templates:
         description: 'Comma-separated templates to test (aap,aapasm,pm,bmp,edns,ds2). Empty = all.'
         default: ''
-      env:
+      environment:
         description: 'Environment folder to use (must exist under environments/<env>/).'
         type: choice
         options: [test]
         default: test
+      action:
+        description: 'Deploy, Destroy or Deploy&Destroy'
+        required: true
+        type: string
+        default: Deploy
+        #options: [Deploy, Destroy, Deploy&Destroy]
   pull_request:
     types: [labeled, synchronize, reopened]
     paths:
@@ -168,7 +174,9 @@ jobs:
 
       - name: Deploy
         id: deploy
-        if: steps.prep.outputs.skip != 'true'
+        if: |
+          steps.prep.outputs.skip != 'true' &&
+          contains(inputs.action, 'Deploy')
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `
@@ -180,7 +188,10 @@ jobs:
 
       - name: Destroy (always)
         id: destroy
-        if: always() && steps.prep.outputs.skip != 'true'
+        if: |
+          always() && 
+          steps.prep.outputs.skip != 'true' &&
+          contains(inputs.action, 'Destroy')
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `
@@ -222,7 +233,10 @@ jobs:
   report:
     name: Report
     needs: test
-    if: always() && needs.detect.outputs.any == 'true' && github.event_name == 'pull_request'
+    if: |
+      always() && 
+      needs.detect.outputs.any == 'true' && 
+      github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Comment on PR

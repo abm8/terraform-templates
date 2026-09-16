@@ -86,7 +86,7 @@ function Invoke-Deploy {
     } else {
         Write-Host "Invoking deploy for template $Template with common args: $commonArgs"
         $commonArgs['-Notes'] = $notes
-        & ./deploy.ps1 $Template @commonArgs -ActivateStaging
+        & ./deploy.ps1 $Template @commonArgs -Save
     }
     if ($LASTEXITCODE -ne 0) { throw "$Template deploy failed with exit code $LASTEXITCODE" }
 }

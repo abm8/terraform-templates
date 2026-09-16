@@ -105,7 +105,7 @@ Write-Host "Wrote tfvars: $tfvarsPath ($($TfvarsContent.Length) chars)"
 
 # S3 state key: one per template + variant so parallel runs and reruns are isolated.
 $cleanName = $TfvarsName -replace '\.tfvars$', ''
-$stateKey = "$folder/$Environment-$cleanName.tfstate"
+$stateKey = "$folder/$cleanName-terraform.tfstate"
 
 $backendConfigPath = Join-Path $envDir 'config.backend'
 $backendConfig = @"

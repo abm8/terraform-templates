@@ -92,13 +92,19 @@ jobs:
         env:
           EVENT:          ${{ github.event_name }}
           INPUT_LIST:     ${{ inputs.templates }}
-          INPUT_ENV:      ${{ inputs.env }}
-          CHANGE_AAP:     ${{ steps.changes.outputs.aap }}
-          CHANGE_AAPASM:  ${{ steps.changes.outputs.aapasm }}
-          CHANGE_PM:      ${{ steps.changes.outputs.pm }}
-          CHANGE_BMP:     ${{ steps.changes.outputs.bmp }}
-          CHANGE_EDNS:    ${{ steps.changes.outputs.edns }}
-          CHANGE_DS2:     ${{ steps.changes.outputs.ds2 }}
+          INPUT_ENV:      ${{ inputs.environment }}
+          CHANGE_AAP:     true
+          CHANGE_AAPASM:  false
+          CHANGE_PM:      true
+          CHANGE_BMP:     false
+          CHANGE_EDNS:    true
+          CHANGE_DS2:     false
+          # CHANGE_AAP:     ${{ steps.changes.outputs.aap }}
+          # CHANGE_AAPASM:  ${{ steps.changes.outputs.aapasm }}
+          # CHANGE_PM:      ${{ steps.changes.outputs.pm }}
+          # CHANGE_BMP:     ${{ steps.changes.outputs.bmp }}
+          # CHANGE_EDNS:    ${{ steps.changes.outputs.edns }}
+          # CHANGE_DS2:     ${{ steps.changes.outputs.ds2 }}
           CHANGE_SHARED:  ${{ steps.changes.outputs.shared }}
 
   test:

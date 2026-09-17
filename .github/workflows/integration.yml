@@ -192,8 +192,7 @@ jobs:
         id: destroy
         if: |
           always() && 
-          steps.prep.outputs.skip != 'true' &&
-          contains(inputs.action, 'Destroy')
+          steps.prep.outputs.skip != 'true'
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `

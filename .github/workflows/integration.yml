@@ -183,8 +183,7 @@ jobs:
       - name: Deploy
         id: deploy
         if: |
-          steps.prep.outputs.skip != 'true' &&
-          contains(inputs.action, 'Deploy')
+          steps.prep.outputs.skip != 'true' 
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `

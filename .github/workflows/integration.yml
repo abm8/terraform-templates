@@ -27,7 +27,7 @@ on:
         description: 'Deploy, Destroy or Deploy&Destroy'
         required: true
         type: string
-        default: Deploy
+        default: 'Deploy'
         #options: [Deploy, Destroy, Deploy&Destroy]
   pull_request:
     types: [labeled, synchronize, reopened]
@@ -95,18 +95,12 @@ jobs:
           EVENT:          ${{ github.event_name }}
           INPUT_LIST:     ${{ inputs.templates }}
           INPUT_ENV:      ${{ inputs.environment }}
-          CHANGE_AAP:     'true'
-          CHANGE_AAPASM:  'false'
-          CHANGE_PM:      'true'
-          CHANGE_BMP:     'false'
-          CHANGE_EDNS:    'true'
-          CHANGE_DS2:     'false'
-          # CHANGE_AAP:     ${{ steps.changes.outputs.aap }}
-          # CHANGE_AAPASM:  ${{ steps.changes.outputs.aapasm }}
-          # CHANGE_PM:      ${{ steps.changes.outputs.pm }}
-          # CHANGE_BMP:     ${{ steps.changes.outputs.bmp }}
-          # CHANGE_EDNS:    ${{ steps.changes.outputs.edns }}
-          # CHANGE_DS2:     ${{ steps.changes.outputs.ds2 }}
+          CHANGE_AAP:     ${{ steps.changes.outputs.aap }}
+          CHANGE_AAPASM:  ${{ steps.changes.outputs.aapasm }}
+          CHANGE_PM:      ${{ steps.changes.outputs.pm }}
+          CHANGE_BMP:     ${{ steps.changes.outputs.bmp }}
+          CHANGE_EDNS:    ${{ steps.changes.outputs.edns }}
+          CHANGE_DS2:     ${{ steps.changes.outputs.ds2 }}
           CHANGE_SHARED:  ${{ steps.changes.outputs.shared }}
 
   test:
@@ -183,7 +177,8 @@ jobs:
       - name: Deploy
         id: deploy
         if: |
-          steps.prep.outputs.skip != 'true' 
+          steps.prep.outputs.skip != 'true' &&
+          contains(inputs.action, 'Deploy')
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `

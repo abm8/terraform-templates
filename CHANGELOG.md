@@ -1,3 +1,13 @@
+# [2.2.0](https://github.com/akamai/terraform-templates/compare/v2.1.0...v2.2.0) (2026-09-17)
+
+
+### Features
+
+* API Call Rate Summary ([734c40f](https://github.com/akamai/terraform-templates/commit/734c40fef765dd1a104db76ea32c8d499e2a53de))
+* Updated with API call summary and log rotation ([c9a9795](https://github.com/akamai/terraform-templates/commit/c9a97954a287221d1b1a3d760c30e8ab3235f12f))
+
+
+
 # [2.1.0](https://github.com/akamai/terraform-templates/compare/v2.0.0...v2.1.0) (2026-09-09)
 
 

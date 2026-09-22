@@ -96,7 +96,7 @@ function Invoke-Destroy {
 
     # Single -Destroy call works for every template (BMP module tears down both phases).
     Write-Host "Invoking destroy for template $Template with common args: $commonArgs"
-    & ./deploy.ps1 $Template @commonArgs -Destroy -StdinInput "YES"
+    & ./deploy.ps1 $Template @commonArgs -Destroy
     if ($LASTEXITCODE -ne 0) {
         Write-Warning "$Template destroy exited with $LASTEXITCODE — investigate orphans in the sandbox."
         exit $LASTEXITCODE

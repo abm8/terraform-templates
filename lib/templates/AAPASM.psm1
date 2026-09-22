@@ -164,8 +164,11 @@ class AAPASMTemplate {
         $success = $false
         
         while (-not $success -and $retryCount -lt $maxRetries) {
-            $autoApprove = $retryCount -gt 0
-            $exitCode = Invoke-TerraformDestroy -TemplateFolder $this.TemplateFolder -VarFilePath $varFile -AutoApprove:$autoApprove
+            $exitCode = Invoke-TerraformDestroy `
+                -TemplateFolder $this.TemplateFolder `
+                -VarFilePath $varFile `
+                -AutoApprove `
+                -NoRefresh
             
             if ($exitCode -eq 0) {
                 $success = $true

@@ -217,6 +217,7 @@ function Invoke-TerraformDestroy {
 
         # Pass -NoRefresh to skip state refresh during destroy. Useful when data
         # sources (e.g. akamai_appsec_rate_policies) fail to read during teardown.
+        # Speeds up the destroy operation too.
         [Parameter(Mandatory = $false)]
         [switch]$NoRefresh
     )

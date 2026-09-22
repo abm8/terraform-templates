@@ -218,6 +218,12 @@ jobs:
         shell: pwsh
         run: |
           $label = '${{ matrix.template }}' + $(if ('${{ matrix.variant }}') { ' (${{ matrix.variant }})' } else { '' })
+          $notes = ''
+          if ('${{ matrix.template }}' -eq 'aap') {
+            $notes = 'Destroy is expected to fail (AAP config cannot be deleted, manual cleanup required); resources are created only (not activated).'
+          } elseif ('${{ matrix.template }}' -in @('aapasm', 'pm')) {
+            $notes = 'Resources are created only (not activated).'
+          }
           if ('${{ steps.prep.outputs.skip }}' -eq 'true') {
             $status = '⚠️ skipped: no test env'
           } elseif ('${{ steps.deploy.outcome }}' -ne 'success') {
@@ -227,10 +233,10 @@ jobs:
           } else {
             $status = '✅ pass'
           }
-          $row = "| $label | ${{ matrix.env }} | $status |"
+          $row = "| $label | ${{ matrix.env }} | $status | $notes |"
           if (-not (Test-Path $env:GITHUB_STEP_SUMMARY)) { New-Item -Path $env:GITHUB_STEP_SUMMARY -ItemType File | Out-Null }
-          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Template | Env | Result |"
-          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|---|---|---|"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "| Template | Env | Result | Notes |"
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "|---|---|---|---|"
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $row
 
   report:

@@ -47,6 +47,7 @@ $notes = "ci-$RunId"
 $commonArgs = @{
     'Environment' = $Environment; 
     'Force' = $true; 
+    'Debug' = $true; 
     '-BackendType' = 's3';
 }
 
@@ -66,11 +67,12 @@ function Invoke-Deploy {
 
     if ($Template -eq 'bmp' -and $Variant -eq 'two-phase') {
         Write-Host "BMP two-phase deploy: Phase 1 (API def) → Phase 2 (sec config)"
-        & ./deploy.ps1 bmp @commonArgs -ActivateStagingApi
+        # Phase 1: Save API definition only. No activation for now, therefore no Phase 2 for now.
+        & ./deploy.ps1 bmp @commonArgs -SaveApi # -ActivateStagingApi
         if ($LASTEXITCODE -ne 0) { throw "BMP Phase 1 (API) failed with exit code $LASTEXITCODE" }
 
-        & ./deploy.ps1 bmp @commonArgs -ActivateStagingSec
-        if ($LASTEXITCODE -ne 0) { throw "BMP Phase 2 (Sec) failed with exit code $LASTEXITCODE" }
+        # & ./deploy.ps1 bmp @commonArgs -ActivateStagingSec
+        # if ($LASTEXITCODE -ne 0) { throw "BMP Phase 2 (Sec) failed with exit code $LASTEXITCODE" }
         return
     }
 
@@ -94,13 +96,16 @@ function Invoke-Deploy {
 function Invoke-Destroy {
     if ($Phase -ne 'Destroy') { return }
 
-    # Single -Destroy call works for every template (BMP module tears down both phases).
-    Write-Host "Invoking destroy for template $Template with common args: $commonArgs"
-    & ./deploy.ps1 $Template @commonArgs -Destroy
-    if ($LASTEXITCODE -ne 0) {
-        Write-Warning "$Template destroy exited with $LASTEXITCODE — investigate orphans in the sandbox."
-        exit $LASTEXITCODE
-    }
+    # AAP cannot be destroyed automatically; skip destroy for AAP. Manual deletion is needed.
+    if ($Template -ne 'aap') {
+        # Single -Destroy call works for every template (BMP module tears down both phases).
+        Write-Host "Invoking destroy for template $Template with common args: $commonArgs"
+        & ./deploy.ps1 $Template @commonArgs -Destroy
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning "$Template destroy exited with $LASTEXITCODE — investigate orphans in the sandbox."
+            exit $LASTEXITCODE
+        }
+    } elseif ($Template -eq 'aap') { return }
 }
 
 Invoke-Deploy

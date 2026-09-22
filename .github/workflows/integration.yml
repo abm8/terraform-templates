@@ -223,6 +223,8 @@ jobs:
             $notes = 'Destroy is expected to fail (AAP config cannot be deleted, manual cleanup required); resources are created only (not activated).'
           } elseif ('${{ matrix.template }}' -in @('aapasm', 'pm')) {
             $notes = 'Resources are created only (not activated).'
+          } elseif ('${{ matrix.template }}' -in @('bmp')) {
+            $notes = 'Only the API Definition is created and not activated.'
           }
           if ('${{ steps.prep.outputs.skip }}' -eq 'true') {
             $status = '⚠️ skipped: no test env'

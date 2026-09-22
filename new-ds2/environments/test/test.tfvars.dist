@@ -16,14 +16,14 @@ contract_id = "ctr_1-XXXX"
 ## Stream Identity
 #### ------------------------------------------------------------
 
-name         = "DS2-DEV"
+name         = "DS2-TEST"
 property_ids = ["prp_XXXX"]
 
 #### ------------------------------------------------------------
 ## Stream Behaviour
 #### ------------------------------------------------------------
 
-activate_stream = false # never activate automatically in dev
+activate_stream = false # never activate automatically in test
 
 enable_midgress     = false
 notification_emails = []

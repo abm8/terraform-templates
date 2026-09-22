@@ -26,9 +26,12 @@ on:
       action:
         description: 'Deploy, Destroy or Deploy&Destroy'
         required: true
-        type: string
-        default: 'Deploy'
-        #options: [Deploy, Destroy, Deploy&Destroy]
+        type: choice
+        options:
+          - Deploy
+          - Destroy
+          - Deploy&Destroy
+        default: Deploy
   pull_request:
     types: [labeled, synchronize, reopened]
     paths:
@@ -177,8 +180,7 @@ jobs:
       - name: Deploy
         id: deploy
         if: |
-          steps.prep.outputs.skip != 'true' &&
-          contains(inputs.action, 'Deploy')
+          steps.prep.outputs.skip != 'true'
         shell: pwsh
         run: |
           ./ci/run-lifecycle.ps1 `

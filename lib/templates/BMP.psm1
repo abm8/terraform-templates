@@ -458,7 +458,8 @@ function Get-BMPParamPolicy {
             "Environment", "Destroy", "VersionNotes", "SkipValidation", "Dry",
             "ActivateStaging", "ActivateProduction",
             "SaveApi", "ActivateStagingApi", "ActivateProductionApi",
-            "SaveSec", "ActivateStagingSec", "ActivateProductionSec"
+            "SaveSec", "ActivateStagingSec", "ActivateProductionSec",
+            "BackendType"
         )
         MustHaveOneOf = @(
             "Destroy", "ActivateStaging", "ActivateProduction",

@@ -54,4 +54,10 @@ lib/**/.cache/
 unit-testing/
 dom_challenges.txt
 dom_search_results.txt
-dom_validation_entries.txt
+dom_validation_entries.txt.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.plan
+.DS_Store
+*.tfvars

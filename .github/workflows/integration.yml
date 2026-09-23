@@ -1,4 +1,4 @@
-name: Template Integration (Full Lifecycle)
+name: Tests (Full Lifecycle)
 
 # Full save → activate-staging → destroy runs against the Akamai sandbox account,
 # backed by Linode Object Storage for remote Terraform state.
@@ -128,6 +128,7 @@ jobs:
         shell: pwsh
         run: |
           Install-Module Akamai.Contracts -Force -Scope CurrentUser -SkipPublisherCheck
+          Install-Module -Name 'AWS.Tools.S3' -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
 
       - name: Look up tfvars secret for this row
         id: secret

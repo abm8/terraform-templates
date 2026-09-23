@@ -69,9 +69,10 @@ function Get-RowsForTemplate {
             )
         }
         'bmp' {
-            # Single row; run-lifecycle.ps1 executes Phase 1 then Phase 2 sequentially against the same tfvars.
+            # Single row; run-lifecycle.ps1 executes Phase 1 then Phase 2 sequentially against the same tfvars. 
+            # However, to avoid longer test times and not being able to destroy an API Definition only phase 1 will be executed.
             return @(
-                (New-MatrixRow -Template 'bmp' -Env $Env -TfvarsName "$Env.tfvars" -SecretName 'TFVARS_BMP' -Variant 'two-phase')
+                (New-MatrixRow -Template 'bmp' -Env $Env -TfvarsName "$Env.tfvars" -SecretName 'TFVARS_BMP' -Variant '1st-phase')
             )
         }
         default {

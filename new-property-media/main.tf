@@ -1,29 +1,89 @@
 /**
- * # Onboarding: Akamai AMD (Adaptive Media Delivery) Property
+ * # Onboarding: Akamai Adaptive Media Delivery (AMD) Property
  *
  * ## Authentication
  *
- * Please refer to [Terraform Overview](https://techdocs.akamai.com/terraform/docs/overview)
- * and [Terraform Alternative authentication](https://techdocs.akamai.com/terraform/docs/gs-authentication)
- * for details on authenticating to Akamai when using Terraform.
+ * Please refer to [Terraform Overview](https://techdocs.akamai.com/terraform/docs/overview) and [Terraform Alternative authentication](https://techdocs.akamai.com/terraform/docs/gs-authentication) for more details on how to authenticate to Akamai when using Terraform.
  *
  * ## Usage Instructions
+ *  Akamai Terraform Deployment Guide
+ *  This guide will help you onboard hostnames using Akamai Terraform templates for:
+ *      Adaptive Media Delivery (AMD): new-property-media
  *
- * ### Step 1: Download the Template
+ *  ### Step 1: Download the Templates
+ *  Clone the repository, using following command:
+ *
+ *  ```bash
+ *  > git clone <git url>
+ *  > cd terraform-templates/new-property-media/
+ *  ```
+ *
+ *  ### Step 2: Update `terraform.tfvars`
+ *  Update the `terraform.tfvars` file with the required details:
+ *
+ *  #### Account Section as mentioned in the .edgerc file
+ *  `edgerc_section = "<Account Section Name>"`
+ *
+ *  Powershell command : `Get-AccountSwitchKey 'Account Name'`
+ *
+ *  #### Name of the Configuration
+ *  `name           = "<Config Name>"`
+ *
+ *  #### Contract and Group Details
+ *  `contract_id    = "<Contract ID>"`
+ *
+ *  Powershell command : `Get-Contract -Section "edgercsection-name"`
+ *
+ *  `group_id       = "<Group ID>"`
+ *
+ *  Powershell command : `Get-Group -Section "edgercsection-name"`
+ *
+ *  #### Hostnames you wish to onboard
+ *  `hostnames      = ["<hostname1>", "<hostname2>"]`
+ *
+ *  #### Origin Details
+ *  `default_origin = "<Origin Name>"`
+ *
+ *  #### Notification Email
+ *  `emails         = ["<Your Email ID>"]`
+ *
+ * Select the edge-hostname mode and matching TLS settings:
+ *
+ * - `SBD`: `etls=true` uses edgekey.net; `etls=false` uses edgesuite.net.
+ * - `EDGESUITE`: Standard TLS; requires `etls=false`.
+ * - `EDGEKEY`: Enhanced TLS; requires `etls=true` and `certificate_id`.
+ * - `AKAMAIZED_HOSTNAME`: Shared certificate; provide only the hostname label.
+ *
+ *  #### AMD-specific behaviors
+ *  Set `segmented_media_optimization_behavior` to `LIVE` for live streams or `ON_DEMAND` for video on demand.
+ *  Use `additional_origins` for hostname- or path-based origin routing.
+ *
+ *  ### Step 3: Run Terraform
+ *  Run the deployment script `../deploy.ps1`. This script is written in PowerShell and acts as an orchestrator for Terraform. It allows to perform individual save and activation actions, it handles the multi-environment directory and files to avoid overwriting the state file. A debug/log mode can also be enabled.
+ *
+ * A common flow is as follows (with "prod" as the environment):
+ * 1. Save the changes only (no activations) using the media template:
  * ```bash
- * > git clone <git url>
- * > cd templates-amd/
+ * PS> .\deploy.ps1 media -Env prod -Save -Notes "Some user notes"
  * ```
  *
- * ### Step 2: Update your environment's tfvars
- * Copy `environments/<env>/<env>.tfvars.dist` to `environments/<env>/<env>.tfvars`
- * and fill in the required values: edgerc_section, name, contract_id, group_id,
- * hostnames, default_origin, activation_contacts.
+ * 2. Activate to staging:
+ * ```bash
+ * PS> .\deploy.ps1 media -Env prod -ActivateStaging
+ * ```
  *
- * ### Step 3: Run Terraform
- * Run the deployment script `../deploy.ps1` (if available for this repo), or run
- * terraform directly from within this directory, pointing at the right environment's
- * backend/tfvars.
+ * 3. Activate to production:
+ * ```bash
+ * PS> .\deploy.ps1 media -Env prod -ActivateProduction
+ * ```
+ *
+ * Options:
+ * * Add the `-Debug` option to the command to log all the Terraform actions in a file stored in the specific environment directory.
+ * * Add the `-Dry` option to the command to do a dry-run (nothing is applied).
+ * * You can delete all the resources when you don't need them. Keep in mind some resource can't be deleted in which cases the `terraform destroy` operation will fail as a consequence.
+ *     ```bash
+ *     PS> .\deploy.ps1 media -Env dev -Destroy
+ *     ```
  */
 
 module "property" {
@@ -75,15 +135,7 @@ module "property" {
   enable_debug = var.enable_debug
   debug_key    = var.debug_key
 
-  enable_cors_policy     = var.enable_cors_policy
-  cors_allow_origin      = var.cors_allow_origin
-  cors_allow_methods     = var.cors_allow_methods
-  cors_allow_headers     = var.cors_allow_headers
-  cors_expose_headers    = var.cors_expose_headers
-  cors_allow_credentials = var.cors_allow_credentials
-  cors_max_age           = var.cors_max_age
-
-  activation_contacts             = var.activation_contacts
+  activation_contacts             = var.emails
   activate_to_staging             = var.activate_to_staging
   activate_to_production          = var.activate_to_production
   activation_to_staging_exists    = var.activation_to_staging_exists

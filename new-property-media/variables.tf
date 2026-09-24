@@ -120,9 +120,14 @@ variable "certificate_id" {
 }
 
 variable "ip_behavior" {
-  description = "IP version behavior for the edge hostname: IPV4, IPV6_COMPLIANCE, or IPV6_PERFORMANCE."
+  description = "IP version behavior for the edge hostname: IPV4 or IPV6_COMPLIANCE."
   type        = string
   default     = "IPV4"
+
+  validation {
+    condition     = contains(["IPV4", "IPV6_COMPLIANCE"], var.ip_behavior)
+    error_message = "ip_behavior must be IPV4 or IPV6_COMPLIANCE."
+  }
 }
 
 variable "etls" {
@@ -324,58 +329,16 @@ variable "debug_key" {
   }
 }
 
-variable "enable_cors_policy" {
-  description = "Whether to attach the default CORS policy child rule."
-  type        = bool
-  default     = true
-}
-
-variable "cors_allow_origin" {
-  description = "Value for Access-Control-Allow-Origin."
-  type        = string
-  default     = "*"
-}
-
-variable "cors_allow_methods" {
-  description = "Value for Access-Control-Allow-Methods."
-  type        = string
-  default     = "GET,POST,OPTIONS"
-}
-
-variable "cors_allow_headers" {
-  description = "Value for Access-Control-Allow-Headers."
-  type        = string
-  default     = "origin,range,hdntl,hdnts,CMCD-Request,CMCD-Object,CMCD-Status,CMCD-Session"
-}
-
-variable "cors_expose_headers" {
-  description = "Value for Access-Control-Expose-Headers."
-  type        = string
-  default     = "Server,range,hdntl,hdnts,Akamai-Mon-Iucid-Ing,Akamai-Mon-Iucid-Del,Akamai-Request-BC"
-}
-
-variable "cors_allow_credentials" {
-  description = "Value for Access-Control-Allow-Credentials."
-  type        = string
-  default     = "true"
-}
-
-variable "cors_max_age" {
-  description = "Value for Access-Control-Max-Age, in seconds."
-  type        = string
-  default     = "86400"
-}
-
 ## ----------------------------------------------------------------------------
 ## Activation
 ## ----------------------------------------------------------------------------
 
-variable "activation_contacts" {
+variable "emails" {
   description = "Email addresses notified on activation."
   type        = list(string)
 
   validation {
-    condition     = length(var.activation_contacts) > 0
+    condition     = length(var.emails) > 0
     error_message = "At least one email should be provided."
   }
 }

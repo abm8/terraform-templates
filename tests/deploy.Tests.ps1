@@ -611,6 +611,51 @@ Describe "deploy.ps1 - CLI Parameter Validation" {
         }
     }
 
+    Context "Property Manager - Media (media) parameter validation" {
+        It "Should fail without -Env parameter" {
+            $r = Invoke-Deploy @("media")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "Environment parameter required"
+        }
+
+        It "Should fail without an action parameter" {
+            $r = Invoke-Deploy @("media", "-Env", "dev")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "Please specify at least one parameter"
+        }
+
+        It "Should fail when -Save and -ActivateStaging are combined" {
+            $r = Invoke-Deploy @("media", "-Env", "dev", "-Save", "-ActivateStaging")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "One or more parameters issued cannot be used together"
+        }
+
+        It "Should fail when -Save and -ActivateProduction are combined" {
+            $r = Invoke-Deploy @("media", "-Env", "dev", "-Save", "-ActivateProduction")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "One or more parameters issued cannot be used together"
+        }
+
+        It "Should fail when CPS parameters are passed" {
+            $r = Invoke-Deploy @("media", "-Env", "dev", "-Save", "-CpsType", "dv-san-cert")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "Parameter '-CpsType' is not applicable for the 'media' template"
+        }
+
+        It "Should fail when EDNS parameters are passed" {
+            $r = Invoke-Deploy @("media", "-Env", "dev", "-Save", "-ZoneType", "primary")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "Parameter '-ZoneType' is not applicable for the 'media' template"
+        }
+
+        It "Should fail when BMP parameters are passed" {
+            # -SaveApi without -Save avoids a PowerShell param-set conflict
+            $r = Invoke-Deploy @("media", "-Env", "dev", "-SaveApi")
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "Parameter '-SaveApi' is not applicable for the 'media' template"
+        }
+    }
+
     Context "BMP (bmp) parameter validation" {
         It "Should fail without -Env parameter" {
             $r = Invoke-Deploy @("bmp")
@@ -1036,6 +1081,12 @@ Describe "deploy.ps1 - CLI Parameter Validation" {
 
         It "PM -Destroy: should exit non-zero with cancellation message when user enters 'no'" {
             $r = Invoke-DeployWithInput -Arguments @("pm", "-Env", "nonexistent", "-Destroy") -StdinInput "no"
+            $r.ExitCode | Should -Not -Be 0
+            $r.Output | Should -Match "WARNING: You are about to DESTROY the following resource!"
+        }
+
+        It "Media -Destroy: should exit non-zero with cancellation message when user enters 'no'" {
+            $r = Invoke-DeployWithInput -Arguments @("media", "-Env", "nonexistent", "-Destroy") -StdinInput "no"
             $r.ExitCode | Should -Not -Be 0
             $r.Output | Should -Match "WARNING: You are about to DESTROY the following resource!"
         }

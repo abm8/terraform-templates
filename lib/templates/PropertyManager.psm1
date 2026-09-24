@@ -28,6 +28,15 @@ class PropertyManagerTemplate {
         if (-not (Test-Path $tfvarsPath)) {
             throw "Environment file not found: $tfvarsPath"
         }
+
+        # The web (new-property) template exposes secure_by_default and enable_mPulse and
+        # requires product-ID validation for each. The media (new-property-media) template
+        # does not use those variables, so the web-only checks are skipped.
+        $isWebTemplate = $this.TemplateFolder -eq "new-property"
+        if (-not $isWebTemplate) {
+            Write-Host "Media Property Manager template detected - skipping web-only product validation" -ForegroundColor Yellow
+            return
+        }
         
         # Only validate if secure_by_default is enabled and not skipped
         if (-not $this.DeployParams.SkipValidation) {

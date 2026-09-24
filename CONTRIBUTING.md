@@ -100,7 +100,7 @@ This repository uses a **modular PowerShell architecture** to manage Terraform d
 - **`lib/templates/`** - Template-specific handlers (one per template type)
   - `AAP.psm1` - App & API Protector configuration handler
   - `AAPASM.psm1` - AAP + Advanced Security Management handler  
-  - `PropertyManager.psm1` - Property Manager configuration handler
+  - `PropertyManager.psm1` - Property Manager configuration handler (serves both `pm` → `new-property` and `media` → `new-property-media`)
   - `CPS.psm1` - Certificate Provisioning System handler
   - `DS2.psm1` - DataStream 2 configuration handler
 
@@ -128,7 +128,7 @@ terraform-templates/
 │   └── templates/                # Template-specific handlers
 │       ├── AAP.psm1              # AAP template handler
 │       ├── AAPASM.psm1           # AAP+ASM template handler
-│       ├── PropertyManager.psm1  # Property Manager handler
+│       ├── PropertyManager.psm1  # Property Manager handler (pm + media)
 │       ├── CPS.psm1              # CPS handler
 │       └── DS2.psm1              # DataStream 2 handler
 ├── tests/
@@ -136,7 +136,8 @@ terraform-templates/
 │   └── lib-modules.Tests.ps1     # Module unit tests
 ├── new-aap-configuration/        # AAP template files
 ├── new-aapasm-configuration/     # AAP+ASM template files
-├── new-property/                 # Property Manager template files
+├── new-property/                 # Property Manager template files (web delivery)
+├── new-property-media/           # Property Manager template files (Adaptive Media Delivery)
 ├── new-ds2/                      # DataStream 2 template files
 └── new-*-cert/                   # CPS certificate templates
 ```
@@ -511,7 +512,8 @@ git commit -m "feat: require PowerShell 7+" -m "BREAKING CHANGE: PowerShell 5.1 
 Use scopes to indicate which template is affected:
 - `(aap)` - App & API Protector template
 - `(aapasm)` - AAP+ASM template  
-- `(pm)` - Property Manager template
+- `(pm)` - Property Manager template (web delivery, `new-property`)
+- `(media)` - Property Manager template (Adaptive Media Delivery, `new-property-media`)
 - `(deploy)` - deploy.ps1 script
 - `(ci)` - CI/CD workflows
 - `(docs)`: Documentation
@@ -673,6 +675,7 @@ PS> .\deploy.ps1 <template> -Env dev -Save -Dry
 PS> .\deploy.ps1 aap -Env dev -Save -Dry
 PS> .\deploy.ps1 aapasm -Env qa -Save -Dry
 PS> .\deploy.ps1 pm -Env dev -Save -Dry
+PS> .\deploy.ps1 media -Env dev -Save -Dry
 ```
 
 ### Debug Mode

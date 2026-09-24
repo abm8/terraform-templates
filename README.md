@@ -40,7 +40,8 @@ ps-terraform-templates/
 │   ├── variables.tf
 │   └── README.md
 ├── new-aapasm-configuration/       # AAP+ASM security template
-├── new-property/                   # Delivery configuration template
+├── new-property/                   # Delivery configuration template (web)
+├── new-property-media/             # Delivery configuration template (Adaptive Media Delivery)
 ├── new-bmp-endpoints/              # Bot Manager Premier template
 │   ├── environments/               # Support for multiple environments
 │   │   ├── dev/
@@ -155,6 +156,11 @@ Delivery configuration templates for:
 - ION Standard (product_id: Fresca)
 - ION Premier (product_id: SPM)
 
+### 🎬 new-property-media
+Delivery configuration template for media workloads:
+- Adaptive Media Delivery (product_id: Adaptive_Media_Delivery)
+- Same activation workflow as `new-property`, with a media-oriented rule tree and edge-hostname options (SBD / EDGESUITE / EDGEKEY / AKAMAIZED_HOSTNAME)
+
 ### 🔑 new-dv-san-cert
 Certificate Provisioning System for:
 - DV San Certificate
@@ -191,11 +197,11 @@ Domain Ownership Management:
 
 The `deploy.ps1` script automates the entire deployment lifecycle with built-in validation:
 
-#### Security and Delivery Templates (AAP, AAP+ASM, PM)
+#### Security and Delivery Templates (AAP, AAP+ASM, PM, Media)
 
 | Parameter | Description |
 |-----------|-------------|
-| First Argument | Template to deploy: `aap`, `aapasm`, or `pm` |
+| First Argument | Template to deploy: `aap`, `aapasm`, `pm` (web delivery, `new-property`), or `media` (Adaptive Media Delivery, `new-property-media`) |
 | `-Env` | Target environment: `dev`, `qa`, `prod`, etc. |
 | `-Save` | Save configuration without activation |
 | `-ActivateStaging` | Activate to Akamai staging network |
@@ -348,6 +354,20 @@ Refer to each template's `README.md` for detailed configuration options.
 
 # Skip drift-detection prompt
 .\deploy.ps1 aap -Env prod -Save -Force
+
+# --- Property Manager (Media / AMD) ---
+
+# Save an Adaptive Media Delivery property without activation
+.\deploy.ps1 media -Env dev -Save -Notes "Initial AMD config"
+
+# Activate a media property to staging
+.\deploy.ps1 media -Env qa -ActivateStaging
+
+# Activate a media property to production
+.\deploy.ps1 media -Env prod -ActivateProduction -Notes "AMD go-live"
+
+# Destroy a media property
+.\deploy.ps1 media -Env dev -Destroy
 
 # --- CPS (Certificate Provisioning System) ---
 

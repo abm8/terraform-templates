@@ -9,13 +9,14 @@ or activate to both networks simultaneously. Also supports certificate managemen
 This script uses a modular architecture with template handlers in lib/templates/ and shared functionality in lib/core/.
 
 .PARAMETER TemplateType
-Specifies the template type. Available values: aap, aapasm, pm, cps, bmp, edns, ds2 ,dom
+Specifies the template type. Available values: aap, aapasm, pm, media, cps, bmp, edns, ds2 ,dom
+'pm' targets the web delivery template (new-property); 'media' targets the media delivery template (new-property-media).
 
 .PARAMETER CpsType
 Specifies the CPS certificate type when TemplateType is 'cps'. Available values: dv-san-cert, third-party-cert
 
 .PARAMETER Environment
-The environment to deploy to (e.g., prod, dev, qa). Used for aap, aapasm, pm, and bmp templates.
+The environment to deploy to (e.g., prod, dev, qa). Used for aap, aapasm, pm, media, and bmp templates.
 
 .PARAMETER CertNumber
 The certificate identifier. Used for CPS templates.
@@ -107,6 +108,14 @@ PS> .\deploy.ps1 pm -Env qa -ActivateProduction -Notes "Some user notes"
 Create and Activate to production network a property manager configuration for qa environment
 
 .EXAMPLE
+PS> .\deploy.ps1 media -Env prod -Save -Notes "Some user notes"
+Create/Save a media delivery property (new-property-media) for prod without activations
+
+.EXAMPLE
+PS> .\deploy.ps1 media -Env dev -ActivateStaging
+Create and Activate to staging network a media delivery property for the dev environment
+
+.EXAMPLE
 PS> .\deploy.ps1 cps -CpsType dv-san-cert -CreateCert cert1
 Create a DV SAN certificate
 
@@ -193,7 +202,7 @@ https://github.com/akamai/terraform-templates
 [CmdletBinding(DefaultParameterSetName = 'save-activate')]
 Param(
     [Parameter(Position = 0, Mandatory = $true)]
-    [ValidateSet("aap", "aapasm", "pm", "cps", "bmp", "edns", "ds2" , "dom")]
+    [ValidateSet("aap", "aapasm", "pm", "media", "cps", "bmp", "edns", "ds2" , "dom")]
     [string]$TemplateType,
 
     # --- Common parameters ---
@@ -311,6 +320,7 @@ $templateModuleMap = @{
     "aap"    = "AAP"
     "aapasm" = "AAPASM"
     "pm"     = "PropertyManager"
+    "media"  = "PropertyManager"
     "cps"    = "CPS"
     "bmp"    = "BMP" 
     "edns"   = "EDNS"
@@ -334,6 +344,7 @@ $templateFolderMap = @{
     "aap"    = "new-aap-configuration"
     "aapasm" = "new-aapasm-configuration"
     "pm"     = "new-property"
+    "media"  = "new-property-media"
     "bmp"    = "new-bmp-endpoints"
     "edns"   = "new-edns"
     "ds2"    = "new-ds2"

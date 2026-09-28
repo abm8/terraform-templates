@@ -59,9 +59,9 @@ cache_key_query_params_behavior        = "IGNORE_ALL"
 enable_dynamic_throughput_optimization = true
 enable_http3                           = true
 
-# Enhanced debug is enabled by default. Leave debug_key null for a generated
-# stable key, or provide a 64-character hexadecimal key via secret input.
-enable_debug = true
+# Enhanced debug is disabled by default; set enable_debug=true to enable it.
+# Leave debug_key = null for a generated stable key, or provide a 64-character hexadecimal key.
+enable_debug = false
 debug_key    = null
 
 ## ----------------------------------------------------------------------------

@@ -84,7 +84,7 @@ The rule tree creates an `Additional Origins` parent rule and one child origin r
 
 ## Debugging
 
-Enhanced debug is enabled by default. Set `debug_key` to a 64-character hexadecimal value when a managed key is required; otherwise Terraform generates and stores a stable key in state.
+Enhanced debug is disabled by default. Set `enable_debug = true` in the environment tfvars to enable it. Leave `debug_key = null` for a stable auto-generated key, or supply a 64-character hexadecimal value to pin one.
 
 ## Outputs
 

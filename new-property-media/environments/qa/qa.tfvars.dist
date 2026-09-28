@@ -49,9 +49,9 @@ cpcode_name = "amd-qa-cpcode"
 # Media optimization mode. Use LIVE for live streams or ON_DEMAND for Video on Demand (VOD).
 segmented_media_optimization_behavior = "ON_DEMAND"
 
-# Enhanced debug is enabled by default; set enable_debug=false to disable it.
-# Leave debug_key = null to generate a stable key, or provide a 64-character hexadecimal key.
-enable_debug = true
+# Enhanced debug is disabled by default; set enable_debug=true to enable it.
+# Leave debug_key = null for a generated stable key, or provide a 64-character hexadecimal key.
+enable_debug = false
 debug_key    = null
 
 ## ----------------------------------------------------------------------------

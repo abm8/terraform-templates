@@ -92,7 +92,13 @@ Usage: .\deploy.ps1 -CredentialsCheck -Username <user>
 Used with -CredentialsCheck. The Akamai Identity & Access Management username to check.
 
 .PARAMETER ClientType
-Used with -CredentialsCheck. Filters by client type: CLIENT (default), USER_CLIENT, or SERVICE_ACCOUNT.
+Used with -CredentialsCheck. Filters by client type: CLIENT, USER_CLIENT (default), or SERVICE_ACCOUNT.
+
+.PARAMETER EdgeRCFile
+Used with -CredentialsCheck. Path to the EdgeGrid resource file to authenticate with. Defaults to ~/.edgerc.
+
+.PARAMETER Section
+Used with -CredentialsCheck. The section name in the EdgeGrid resource file to read credentials from. Defaults to 'default'.
 
 .PARAMETER Dry
 Outputs the terraform plan and performs no actions.
@@ -256,6 +262,10 @@ PS> .\deploy.ps1 -CredentialsCheck -Username jdoe -ClientType SERVICE_ACCOUNT
 Check permissions for a service-account-type API client.
 
 .EXAMPLE
+PS> .\deploy.ps1 -CredentialsCheck -Username jdoe -EdgeRCFile ~/.edgerc -Section tf-prod
+Check permissions using a non-default edgerc section.
+
+.EXAMPLE
 PS> .\deploy.ps1 aap -Env dev -Save -BackendType s3
 Save changes using a remote S3 backend. Requires config.backend to already exist at
 ./new-aap-configuration/environments/dev/config.backend with valid S3 backend keys
@@ -361,6 +371,12 @@ Param(
     [ValidateSet('CLIENT', 'USER_CLIENT', 'SERVICE_ACCOUNT')]
     [string]$ClientType,
 
+    [Parameter(ParameterSetName = 'credentials-check')]
+    [string]$EdgeRCFile,
+
+    [Parameter(ParameterSetName = 'credentials-check')]
+    [string]$Section,
+
     # --- BMP parameters ---
     # Phase 1: API-scope actions
     [Parameter(ParameterSetName = 'bmp-api-save')]
@@ -428,7 +444,11 @@ if ($CredentialsCheck) {
     }
 
     try {
-        Invoke-CredentialsCheck -Username $Username -ClientType $ClientType
+        $credArgs = @{ Username = $Username }
+        if ($PSBoundParameters.ContainsKey('ClientType')) { $credArgs['ClientType'] = $ClientType }
+        if ($PSBoundParameters.ContainsKey('EdgeRCFile')) { $credArgs['EdgeRCFile'] = $EdgeRCFile }
+        if ($PSBoundParameters.ContainsKey('Section')) { $credArgs['Section'] = $Section }
+        Invoke-CredentialsCheck @credArgs
     }
     catch {
         Write-Error "Credentials check failed: $_"

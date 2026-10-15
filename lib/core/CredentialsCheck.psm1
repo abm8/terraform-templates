@@ -81,7 +81,13 @@ function Invoke-CredentialsCheck {
 
         [Parameter(Mandatory = $false)]
         [ValidateSet('CLIENT', 'USER_CLIENT', 'SERVICE_ACCOUNT')]
-        [string]$ClientType
+        [string]$ClientType = 'USER_CLIENT',
+
+        [Parameter(Mandatory = $false)]
+        [string]$EdgeRCFile,
+
+        [Parameter(Mandatory = $false)]
+        [string]$Section
     )
 
     if (-not (Get-Command Get-IAMAllowedAPIs -ErrorAction SilentlyContinue)) {
@@ -90,8 +96,9 @@ function Invoke-CredentialsCheck {
 
     Write-Host "Checking API client permissions for '$Username'..." -ForegroundColor Cyan
 
-    $getArgs = @{ Username = $Username }
-    if ($ClientType) { $getArgs['ClientType'] = $ClientType }
+    $getArgs = @{ Username = $Username; ClientType = $ClientType }
+    if ($EdgeRCFile) { $getArgs['EdgeRCFile'] = $EdgeRCFile }
+    if ($Section) { $getArgs['Section'] = $Section }
     $allowedApis = Get-IAMAllowedAPIs @getArgs
 
     $apisByEndpoint = @{}

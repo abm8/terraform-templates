@@ -215,13 +215,15 @@ Standalone options (cannot be combined with a TemplateType):
 |---|---|
 | `-Download` | Clone/update the `terraform-templates-modules` repo and repoint every `new-*/main.tf` source at the local copy. Accepts `-ModulesPath`, `-ModulesRef`, `-Dry`. |
 | `-Restore` | Revert a previous `-Download`: restore the original `git::` source in every `new-*/main.tf`. Accepts `-Dry`. |
-| `-CredentialsCheck` | Check the API client's permissions against this project's required Akamai APIs (via `Get-IAMAllowedAPIs`). Requires `-Username`; accepts `-ClientType` (`CLIENT`, `USER_CLIENT`, or `SERVICE_ACCOUNT`). Report-only — always exits `0`. |
+| `-CredentialsCheck` | Check the API client's permissions against this project's required Akamai APIs (via `Get-IAMAllowedAPIs`). Requires `-Username`; accepts `-ClientType` (`CLIENT`, `USER_CLIENT` default, or `SERVICE_ACCOUNT`), `-EdgeRCFile`, `-Section`. Report-only — always exits `0`. |
 
 #### Credentials Check
 
 `.\deploy.ps1 -CredentialsCheck -Username <your-username>` verifies the API client has every
 permission this project needs (see [Akamai API Configuration](#akamai-api-configuration)), and
 whether it has the right access level — some APIs only need READ-ONLY, most need READ-WRITE.
+`-ClientType` defaults to `USER_CLIENT`; pass `-EdgeRCFile`/`-Section` if your credentials aren't
+in the default `~/.edgerc` `default` section.
 
 ```powershell
 .\deploy.ps1 -CredentialsCheck -Username jdoe

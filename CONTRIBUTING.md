@@ -548,7 +548,7 @@ Use scopes to indicate which template is affected:
 - `(aap)` - App & API Protector template
 - `(aapasm)` - AAP+ASM template  
 - `(pm)` - Property Manager template (web delivery, `new-property`)
-- `(media)` - Property Manager template (Adaptive Media Delivery, `new-property-media`)
+- `(pm-media)` - Property Manager template (Adaptive Media Delivery, `new-property-media`)
 - `(deploy)` - deploy.ps1 script
 - `(ci)` - CI/CD workflows
 - `(docs)`: Documentation

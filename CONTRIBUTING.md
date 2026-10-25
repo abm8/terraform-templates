@@ -100,7 +100,7 @@ This repository uses a **modular PowerShell architecture** to manage Terraform d
 - **`lib/templates/`** - Template-specific handlers (one per template type)
   - `AAP.psm1` - App & API Protector configuration handler
   - `AAPASM.psm1` - AAP + Advanced Security Management handler  
-  - `PropertyManager.psm1` - Property Manager configuration handler (serves both `pm` → `new-property` and `media` → `new-property-media`)
+  - `PropertyManager.psm1` - Property Manager configuration handler (serves both `pm` → `new-property` and `pm-media` → `new-property-media`)
   - `CPS.psm1` - Certificate Provisioning System handler
   - `DS2.psm1` - DataStream 2 configuration handler
 
@@ -128,7 +128,7 @@ terraform-templates/
 │   └── templates/                # Template-specific handlers
 │       ├── AAP.psm1              # AAP template handler
 │       ├── AAPASM.psm1           # AAP+ASM template handler
-│       ├── PropertyManager.psm1  # Property Manager handler (pm + media)
+│       ├── PropertyManager.psm1  # Property Manager handler (pm + pm-media)
 │       ├── CPS.psm1              # CPS handler
 │       └── DS2.psm1              # DataStream 2 handler
 ├── tests/
@@ -710,7 +710,7 @@ PS> .\deploy.ps1 <template> -Env dev -Save -Dry
 PS> .\deploy.ps1 aap -Env dev -Save -Dry
 PS> .\deploy.ps1 aapasm -Env qa -Save -Dry
 PS> .\deploy.ps1 pm -Env dev -Save -Dry
-PS> .\deploy.ps1 media -Env dev -Save -Dry
+PS> .\deploy.ps1 pm-media -Env dev -Save -Dry
 ```
 
 ### Debug Mode

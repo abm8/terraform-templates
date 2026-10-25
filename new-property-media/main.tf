@@ -62,19 +62,19 @@
  *  Run the deployment script `../deploy.ps1`. This script is written in PowerShell and acts as an orchestrator for Terraform. It allows to perform individual save and activation actions, it handles the multi-environment directory and files to avoid overwriting the state file. A debug/log mode can also be enabled.
  *
  * A common flow is as follows (with "prod" as the environment):
- * 1. Save the changes only (no activations) using the media template:
+ * 1. Save the changes only (no activations) using the pm-media template:
  * ```bash
- * PS> .\deploy.ps1 media -Env prod -Save -Notes "Some user notes"
+ * PS> .\deploy.ps1 pm-media -Env prod -Save -Notes "Some user notes"
  * ```
  *
  * 2. Activate to staging:
  * ```bash
- * PS> .\deploy.ps1 media -Env prod -ActivateStaging
+ * PS> .\deploy.ps1 pm-media -Env prod -ActivateStaging
  * ```
  *
  * 3. Activate to production:
  * ```bash
- * PS> .\deploy.ps1 media -Env prod -ActivateProduction
+ * PS> .\deploy.ps1 pm-media -Env prod -ActivateProduction
  * ```
  *
  * Options:
@@ -82,7 +82,7 @@
  * * Add the `-Dry` option to the command to do a dry-run (nothing is applied).
  * * You can delete all the resources when you don't need them. Keep in mind some resource can't be deleted in which cases the `terraform destroy` operation will fail as a consequence.
  *     ```bash
- *     PS> .\deploy.ps1 media -Env dev -Destroy
+ *     PS> .\deploy.ps1 pm-media -Env dev -Destroy
  *     ```
  */
 

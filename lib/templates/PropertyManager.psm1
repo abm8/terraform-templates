@@ -185,7 +185,7 @@ class PropertyManagerTemplate {
         }
 
         # The web (new-property) template exposes secure_by_default and enable_mPulse and
-        # requires product-ID validation for each. The media (new-property-media) template
+        # requires product-ID validation for each. The pm-media (new-property-media) template
         # does not use those variables, so the web-only checks are skipped.
         $isWebTemplate = $this.TemplateFolder -eq "new-property"
         if (-not $isWebTemplate) {

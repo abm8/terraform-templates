@@ -6,23 +6,23 @@ Requires Terraform >= 1.14.0 and Akamai provider ~> 11.1. The local module sourc
 
 ## Deployment via `deploy.ps1`
 
-This template is registered under the `media` template key. The wrapper script `../deploy.ps1` reuses the Property Manager handler and points it at this folder (`new-property-media`).
+This template is registered under the `pm-media` template key. The wrapper script `../deploy.ps1` reuses the Property Manager handler and points it at this folder (`new-property-media`).
 
 A common flow is as follows (with `prod` as the environment):
 
 1. Save the changes only (no activations):
 ```bash
-PS> ../deploy.ps1 media -Env prod -Save -Notes "Some user notes"
+PS> ../deploy.ps1 pm-media -Env prod -Save -Notes "Some user notes"
 ```
 
 2. Activate to staging:
 ```bash
-PS> ../deploy.ps1 media -Env prod -ActivateStaging
+PS> ../deploy.ps1 pm-media -Env prod -ActivateStaging
 ```
 
 3. Activate to production:
 ```bash
-PS> ../deploy.ps1 media -Env prod -ActivateProduction
+PS> ../deploy.ps1 pm-media -Env prod -ActivateProduction
 ```
 
 Options:
@@ -31,10 +31,10 @@ Options:
 * Add `-Force` to skip the drift-detection prompt.
 * Tear down the property with:
 ```bash
-PS> ../deploy.ps1 media -Env dev -Destroy
+PS> ../deploy.ps1 pm-media -Env dev -Destroy
 ```
 
-> **Note:** `media` reuses the same PowerShell handler as `pm` (`lib/templates/PropertyManager.psm1`). Web-only product-ID checks (`secure_by_default`, `enable_mPulse`) are skipped automatically for the media template.
+> **Note:** `pm-media` reuses the same PowerShell handler as `pm` (`lib/templates/PropertyManager.psm1`). Web-only product-ID checks (`secure_by_default`, `enable_mPulse`) are skipped automatically for the `pm-media` template.
 
 ## Workflow
 
@@ -53,7 +53,7 @@ Keep `activate_to_staging` and `activate_to_production` false while building or 
 For production activation, run:
 
 ```powershell
-../deploy.ps1 media -Env prod -ActivateProduction -Notes "AMD production activation"
+../deploy.ps1 pm-media -Env prod -ActivateProduction -Notes "AMD production activation"
 ```
 
 The deployment script supplies the activation flags and applies the Terraform activation resources. The module retains activation state through `activation_to_staging_exists` and `activation_to_production_exists`; do not change those flags manually.

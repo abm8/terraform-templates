@@ -78,7 +78,7 @@ The `-TemplateType` parameter maps to directory names:
 - `aap` → `new-aap-configuration/`
 - `aapasm` → `new-aapasm-configuration/`
 - `pm` → `new-property/` (web delivery)
-- `media` → `new-property-media/` (Adaptive Media Delivery; reuses the `PropertyManager` handler)
+- `pm-media` → `new-property-media/` (Adaptive Media Delivery; reuses the `PropertyManager` handler)
 - `cps` → `new-dv-san-cert/` or `new-third-party-cert/` (determined by `-CpsType dv-san-cert|third-party-cert`)
 - `bmp` → `new-bmp-endpoints/`
 - `edns` → `new-edns/`

@@ -201,7 +201,7 @@ The `deploy.ps1` script automates the entire deployment lifecycle with built-in 
 
 | Parameter | Description |
 |-----------|-------------|
-| First Argument | Template to deploy: `aap`, `aapasm`, `pm` (web delivery, `new-property`), or `media` (Adaptive Media Delivery, `new-property-media`) |
+| First Argument | Template to deploy: `aap`, `aapasm`, `pm` (web delivery, `new-property`), or `pm-media` (Adaptive Media Delivery, `new-property-media`) |
 | `-Env` | Target environment: `dev`, `qa`, `prod`, etc. |
 | `-Save` | Save configuration without activation |
 | `-ActivateStaging` | Activate to Akamai staging network |
@@ -392,16 +392,16 @@ Locking: for S3-compatible backends without DynamoDB, set `use_lockfile = true` 
 # --- Property Manager (Media / AMD) ---
 
 # Save an Adaptive Media Delivery property without activation
-.\deploy.ps1 media -Env dev -Save -Notes "Initial AMD config"
+.\deploy.ps1 pm-media -Env dev -Save -Notes "Initial AMD config"
 
 # Activate a media property to staging
-.\deploy.ps1 media -Env qa -ActivateStaging
+.\deploy.ps1 pm-media -Env qa -ActivateStaging
 
 # Activate a media property to production
-.\deploy.ps1 media -Env prod -ActivateProduction -Notes "AMD go-live"
+.\deploy.ps1 pm-media -Env prod -ActivateProduction -Notes "AMD go-live"
 
 # Destroy a media property
-.\deploy.ps1 media -Env dev -Destroy
+.\deploy.ps1 pm-media -Env dev -Destroy
 
 # --- CPS (Certificate Provisioning System) ---
 

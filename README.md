@@ -41,7 +41,21 @@ ps-terraform-templates/
 │   └── README.md
 ├── new-aapasm-configuration/       # AAP+ASM security template
 ├── new-property/                   # Delivery configuration template (web)
+│   ├── environments/               # Support for multiple environments
+│   │   ├── dev/
+│   │   ├── qa/
+│   │   └── prod/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── README.md
 ├── new-property-media/             # Delivery configuration template (Adaptive Media Delivery)
+│   ├── environments/               # Support for multiple environments
+│   │   ├── dev/
+│   │   ├── qa/
+│   │   └── prod/
+│   ├── main.tf
+│   ├── variables.tf
+│   └── README.md
 ├── new-bmp-endpoints/              # Bot Manager Premier template
 │   ├── environments/               # Support for multiple environments
 │   │   ├── dev/

@@ -192,7 +192,7 @@ class PropertyManagerTemplate {
             Write-Host "Media Property Manager template detected - skipping web-only product validation" -ForegroundColor Yellow
             return
         }
-        
+
         # Only validate if secure_by_default is enabled and not skipped
         if (-not $this.DeployParams.SkipValidation) {
             $secureByDefaultValue = Get-TfVarValue -FilePath $tfvarsPath -VarName "secure_by_default"

@@ -2,6 +2,8 @@
 
 This root module deploys an Akamai Adaptive Media Delivery (AMD) property through `../../modules-contribution/delivery-media`.
 
+Requires Terraform >= 1.14.0 and Akamai provider ~> 11.1. The local module source is for development; replace it with a pinned Akamai module release before merging.
+
 ## Deployment via `deploy.ps1`
 
 This template is registered under the `media` template key. The wrapper script `../deploy.ps1` reuses the Property Manager handler and points it at this folder (`new-property-media`).
@@ -42,7 +44,7 @@ PS> ../deploy.ps1 media -Env dev -Destroy
 
 ```text
 terraform init
-terraform plan -var-file=environments/abm-test.tfvars -out=.plan
+terraform plan -var-file=environments/abm-test/abm-test.tfvars -out=.plan
 terraform apply .plan
 ```
 
@@ -67,7 +69,7 @@ The deployment script supplies the activation flags and applies the Terraform ac
 
 ## Additional origins
 
-Set `additional_origins` to a map when requests need to route to origins other than `default_origin`. Each entry requires `origin_name`, `forward_host_header`, `hostname_match`, and `path_match`. Either match list may be `null`; at least one should identify the requests for that origin.
+Set `additional_origins` to a map when requests need to route to origins other than `default_origin`. Each entry requires `origin_name`, `forward_host_header`, `hostname_match`, and `path_match`. Either match list may be `null`; at least one must be non-empty to identify the requests for that origin.
 
 ```hcl
 additional_origins = {
@@ -85,6 +87,8 @@ The rule tree creates an `Additional Origins` parent rule and one child origin r
 ## Debugging
 
 Enhanced debug is disabled by default. Set `enable_debug = true` in the environment tfvars to enable it. Leave `debug_key = null` for a stable auto-generated key, or supply a 64-character hexadecimal value to pin one.
+
+The module always declares the enhanced-debug behavior. When disabled, its options contain only `enableDebug: false`.
 
 ## Outputs
 
